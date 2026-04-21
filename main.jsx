@@ -17,20 +17,18 @@ export default function ScheduleMaker() {
   });
 
   useEffect(() => {
-    (async () => {
-      try {
-        const result = await window.storage.get("schedule_classes");
-        if (result) setClasses(JSON.parse(result.value));
-      } catch (e) {
-        // no data yet
-      }
-      setLoading(false);
-    })();
+    try {
+      const raw = localStorage.getItem("schedule_classes");
+      if (raw) setClasses(JSON.parse(raw));
+    } catch (e) {
+      // no data yet
+    }
+    setLoading(false);
   }, []);
 
-  async function persist(next) {
+  function persist(next) {
     try {
-      await window.storage.set("schedule_classes", JSON.stringify(next));
+      localStorage.setItem("schedule_classes", JSON.stringify(next));
     } catch (e) {
       console.error("Save failed:", e);
     }
